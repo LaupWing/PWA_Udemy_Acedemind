@@ -1,5 +1,3 @@
-console.log(navigator.serviceWorker)
-console.log(navigator)
 
 if('serviceWorker' in navigator){
    navigator.serviceWorker
