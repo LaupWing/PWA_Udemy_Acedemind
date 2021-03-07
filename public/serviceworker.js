@@ -3,5 +3,10 @@ self.addEventListener('install', function(event){
 })
 self.addEventListener('activate', function(event){
    console.log('[Service worker] Activating Service Worker', event)
-   return self.ClientRectList.claim()
+   return self.clients.claim()
+})
+
+self.addEventListener('fetch', function(event){
+   console.log('[Service worker] Fetchig something', event)
+   event.respondWith(null)
 })
