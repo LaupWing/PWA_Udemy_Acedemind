@@ -10,3 +10,5 @@ Finally, run `npm start` to start the development server and visit [localhost:80
 
 
 Service workers runs on a seperate thread
+
+SetTimeout doesnt block the execution
