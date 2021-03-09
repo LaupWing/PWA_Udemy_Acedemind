@@ -15,14 +15,3 @@ window.addEventListener('beforeinstallprompt', function(event){
    deferredPrompt = event
    return false
 })
-
-const promise = new Promise(function(resolve, reject){
-   setTimeout(()=>{
-      resolve('Promise is done')
-   },3000)
-   
-})
-
-promise.then(function(data){
-   console.log(data)
-})

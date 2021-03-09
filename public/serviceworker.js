@@ -7,6 +7,5 @@ self.addEventListener('activate', function(event){
 })
 
 self.addEventListener('fetch', function(event){
-   console.log('[Service worker] Fetchig something', event)
-   // event.respondWith(null)
+   event.respondWith(fetch(event.request))
 })
