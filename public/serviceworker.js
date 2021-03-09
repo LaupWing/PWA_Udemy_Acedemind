@@ -13,5 +13,15 @@ self.addEventListener('activate', function(event){
    return self.clients.claim()
 })
 self.addEventListener('fetch', function(event){
-   event.respondWith(fetch(event.request))
+   console.log(event.request)
+   event.respondWith(
+      caches.match(event.request)
+         .then(function(response){
+            if(response){
+               return response 
+            }else{
+               return fetch(event.request)
+            }
+         })
+   )
 })
