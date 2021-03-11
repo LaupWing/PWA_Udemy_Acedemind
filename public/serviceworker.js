@@ -39,12 +39,21 @@ self.addEventListener('activate', function(event){
    )
    return self.clients.claim()
 })
-self.addEventListener('fetch', function(event){
-   console.log(event.request)
-   event.respondWith(
-      caches.match(event.request)
-   )
-})
+
+// Cache only
+// self.addEventListener('fetch', function(event){
+//    event.respondWith(
+//       caches.match(event.request)
+//    )
+// })
+
+// Network only
+// self.addEventListener('fetch', function(event){
+//    event.respondWith(
+//       fetch(event.request)
+//    )
+// })
+
 // self.addEventListener('fetch', function(event){
 //    console.log(event.request)
 //    event.respondWith(
