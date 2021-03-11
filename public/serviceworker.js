@@ -55,15 +55,28 @@ self.addEventListener('activate', function(event){
 // })
 
 // Network with Cache fallback
+// self.addEventListener('fetch', function(event){
+//    event.respondWith(
+//       fetch(event.request)
+//          .catch(function(err){
+//             return caches.match(event.request)
+//          })
+//    )
+// })
+
+
 self.addEventListener('fetch', function(event){
    event.respondWith(
-      fetch(event.request)
-         .catch(function(err){
-            return caches.match(event.request)
+      caches.open(CACHE_DYNAMIC_NAME)
+         .then(function(cache){
+            return fetch(event.request)
+               .then(res=>{
+                  cache.put(event.request, res.clone())
+                  return res
+               })
          })
    )
 })
-
 
 // self.addEventListener('fetch', function(event){
 //    console.log(event.request)
