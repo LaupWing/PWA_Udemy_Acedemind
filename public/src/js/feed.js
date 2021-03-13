@@ -28,18 +28,18 @@ shareImageButton.addEventListener('click', openCreatePostModal);
 
 closeCreatePostModalButton.addEventListener('click', closeCreatePostModal);
 
-function onSaveButtonClicked(event){
-   if('caches' in window){
+function onSaveButtonClicked(event) {
+   if ('caches' in window) {
       caches.open('user-requested')
-         .then(function(cache){
+         .then(function (cache) {
             cache.add('https://httpbin.org/get')
             cache.add('/src/images/sf-boat.jpg')
          })
    }
 }
 
-function clearCard(){
-   while(sharedMomentsArea.hasChildNodes()){
+function clearCard() {
+   while (sharedMomentsArea.hasChildNodes()) {
       sharedMomentsArea.removeChild(sharedMomentsArea.lastChild)
    }
 }
@@ -73,7 +73,16 @@ function createCard() {
 
 let networkDataReceived = false
 
-fetch('https://httpbin.org/get')
+fetch('https://httpbin.org/get', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+         'Accept': 'application/json',
+      },
+      body:JSON.stringify({
+         message: 'Some message'
+      })
+   })
    .then(function (res) {
       return res.json();
    })
@@ -83,16 +92,16 @@ fetch('https://httpbin.org/get')
       createCard();
    });
 
-if('caches' in window){
+if ('caches' in window) {
    caches.match('https://httpbin.org/get')
-      .then(function(res){
-         if(res){
+      .then(function (res) {
+         if (res) {
             return res.json()
          }
       })
-      .then(data=>{
+      .then(data => {
          console.log(data)
-         if(!networkDataReceived){
+         if (!networkDataReceived) {
             clearCard()
             createCard()
          }
