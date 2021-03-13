@@ -1,5 +1,16 @@
 const CACHE_STATIC_NAME = 'static-v3'
 const CACHE_DYNAMIC_NAME = 'dynamic-v3'
+const STATIC_ASSETS =[
+   '/',
+   '/index.html',
+   '/offline.html',
+   '/src/js/app.js',
+   '/src/js/feed.js',
+   '/src/js/material.min.js',
+   '/src/css/app.css',
+   '/src/css/feed.css',
+   '/src/images/main-image.jpg',
+]
 
 self.addEventListener('install', function(event){
    console.log('[Service worker] Installing Service Worker', event)
@@ -76,6 +87,10 @@ self.addEventListener('fetch', function(event){
                      return res
                   })
             })
+      )
+   }else if(new RegExp('\\b'+STATIC_ASSETS.join('\\b|\\b')+'\\b').test(event.request.url)){
+      event.respondWith(
+         fetch(event.request)
       )
    }else{
       event.respondWith(
