@@ -18,6 +18,12 @@ function openCreatePostModal() {
       })
       deferredPrompt = null
    }
+   // if('serviceWorker' in navigator){
+   //    navigator.serviceWorker.getRegistration()
+   //       .then(function(res){
+   //          res.forEach(r=>r.unregister)
+   //       })
+   // }
 }
 
 function closeCreatePostModal() {
