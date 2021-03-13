@@ -12,18 +12,18 @@ const STATIC_ASSETS = [
    '/src/images/main-image.jpg',
 ]
 
-function trimCache(cacheName, maxItems) {
-   caches.open(cacheName)
-      .then(function (cache) {
-         return cache.keys().then(function (keys) {
-            if (keys.length > maxItems) {
-               cache.delete(keys[0])
-                  .then(trimCache(cacheName, maxItems))
-            }
-         })
-      })
+// function trimCache(cacheName, maxItems) {
+//    caches.open(cacheName)
+//       .then(function (cache) {
+//          return cache.keys().then(function (keys) {
+//             if (keys.length > maxItems) {
+//                cache.delete(keys[0])
+//                   .then(trimCache(cacheName, maxItems))
+//             }
+//          })
+//       })
 
-}
+// }
 
 self.addEventListener('install', function (event) {
    console.log('[Service worker] Installing Service Worker', event)
@@ -96,7 +96,7 @@ self.addEventListener('fetch', function (event) {
             .then(function (cache) {
                return fetch(event.request)
                   .then(res => {
-                     trimCache(CACHE_DYNAMIC_NAME, 3)
+                     // trimCache(CACHE_DYNAMIC_NAME, 3)
                      cache.put(event.request, res.clone())
                      return res
                   })
@@ -117,7 +117,7 @@ self.addEventListener('fetch', function (event) {
                      .then(function (res) {
                         return caches.open(CACHE_DYNAMIC_NAME)
                            .then(function (cache) {
-                              trimCache(CACHE_DYNAMIC_NAME, 3)
+                              // trimCache(CACHE_DYNAMIC_NAME, 3)
                               cache.put(event.request.url, res.clone())
                               return res
                            })
