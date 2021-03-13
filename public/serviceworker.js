@@ -88,7 +88,7 @@ self.addEventListener('fetch', function(event){
                   })
             })
       )
-   }else if(new RegExp('\\b'+STATIC_ASSETS.join('\\b|\\b')+'\\b').test(event.request.url)){
+   }else if(STATIC_ASSETS.find(x=>x===event.request.url)){
       event.respondWith(
          fetch(event.request)
       )
