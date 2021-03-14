@@ -100,9 +100,12 @@ self.addEventListener('fetch', function (event) {
          .then(async res => {
             const clonedRes = res.clone()
             const data = await clonedRes.json()
-            Object.values(data).forEach(async d =>{
-               writeData('posts',d)
-            })
+            clearAllData('posts')
+               .then(()=>{
+                  Object.values(data).forEach(async d =>{
+                     writeData('posts',d)
+                  })
+               })
             return res
          })
       )
