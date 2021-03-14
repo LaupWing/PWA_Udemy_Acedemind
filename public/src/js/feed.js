@@ -96,16 +96,11 @@ fetch(url)
       updateUI(Object.values(data))
    });
 
-if ('caches' in window) {
-   caches.match(url)
-      .then(function (res) {
-         if (res) {
-            return res.json()
-         }
-      })
-      .then(data => {
-         if (!networkDataReceived) {
-            updateUI(Object.values(data))
+if ('indexedDB' in window) {
+   readAllData('posts')
+      .then(function(data){
+         if(!networkDataReceived){
+            updateUI(data)
          }
       })
 }

@@ -11,3 +11,12 @@ function writeData(storeName, data){
       store.put(data)
    }) 
 }
+
+function readAllData(storeName){
+   return dbPromise
+      .then(function(db){
+         const tx = db.transaction(storeName, 'readonly')
+         const store = tx.objectStore(storeName)
+         return store.getAll()
+      })
+}
