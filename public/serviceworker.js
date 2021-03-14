@@ -1,4 +1,5 @@
 importScripts('/src/js/idb.js')
+importScripts('/src/js/utility.js')
 
 const CACHE_STATIC_NAME = 'static-v4'
 const CACHE_DYNAMIC_NAME = 'dynamic-v3'
@@ -15,11 +16,6 @@ const STATIC_ASSETS = [
    '/src/images/main-image.jpg',
 ]
 const url = 'https://udemypwa-academind-default-rtdb.firebaseio.com/posts.json'
-const dbPromise = idb.open('posts-store', 1, function(db){
-   if(!db.objectStoreNames.contains('posts')){
-      db.createObjectStore('posts', {keyPath: 'id'}) // search for given id
-   }
-})
 
 // function trimCache(cacheName, maxItems) {
 //    caches.open(cacheName)
@@ -105,11 +101,7 @@ self.addEventListener('fetch', function (event) {
             const clonedRes = res.clone()
             const data = await clonedRes.json()
             Object.values(data).forEach(async d =>{
-               dbPromise.then(db=>{
-                  const tx = db.transaction('posts', 'readwrite')
-                  const store = tx.objectStore('posts')
-                  store.put(d)
-               }) 
+               writeData('posts',d)
             })
             return res
          })
