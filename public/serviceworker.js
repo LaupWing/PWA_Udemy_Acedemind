@@ -11,6 +11,7 @@ const STATIC_ASSETS = [
    '/src/css/feed.css',
    '/src/images/main-image.jpg',
 ]
+const url = 'https://udemypwa-academind-default-rtdb.firebaseio.com/posts.json'
 
 // function trimCache(cacheName, maxItems) {
 //    caches.open(cacheName)
@@ -90,7 +91,7 @@ self.addEventListener('activate', function (event) {
 
 
 self.addEventListener('fetch', function (event) {
-   if (event.request.url === 'https://httpbin.org/get') {
+   if (event.request.url === url) {
       event.respondWith(
          caches.open(CACHE_DYNAMIC_NAME)
             .then(function (cache) {

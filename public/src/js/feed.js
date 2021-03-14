@@ -50,23 +50,23 @@ function clearCard() {
    }
 }
 
-function createCard() {
+function createCard(data) {
    var cardWrapper = document.createElement('div');
    cardWrapper.className = 'shared-moment-card mdl-card mdl-shadow--2dp';
    var cardTitle = document.createElement('div');
    cardTitle.className = 'mdl-card__title';
-   cardTitle.style.backgroundImage = 'url("/src/images/sf-boat.jpg")';
+   cardTitle.style.backgroundImage = `url(${data.image})`;
    cardTitle.style.backgroundSize = 'cover';
    cardTitle.style.height = '180px';
    cardWrapper.appendChild(cardTitle);
    var cardTitleTextElement = document.createElement('h2');
    cardTitleTextElement.style.color = 'white';
    cardTitleTextElement.className = 'mdl-card__title-text';
-   cardTitleTextElement.textContent = 'San Francisco Trip';
+   cardTitleTextElement.textContent = data.title;
    cardTitle.appendChild(cardTitleTextElement);
    var cardSupportingText = document.createElement('div');
    cardSupportingText.className = 'mdl-card__supporting-text';
-   cardSupportingText.textContent = 'In San Francisco';
+   cardSupportingText.textContent = data.location;
    cardSupportingText.style.textAlign = 'center';
    // const cardSaveButton = document.createElement('button')
    // cardSaveButton.textContent = 'Save'
@@ -77,39 +77,35 @@ function createCard() {
    sharedMomentsArea.appendChild(cardWrapper);
 }
 
-let networkDataReceived = false
-
-fetch('https://httpbin.org/get', {
-      method: 'POST',
-      headers: {
-         'Content-Type': 'application/json',
-         'Accept': 'application/json',
-      },
-      body:JSON.stringify({
-         message: 'Some message'
-      })
+function updateUI(data){
+   clearCard()
+   data.forEach(d=>{
+      createCard(d)
    })
+}
+
+let networkDataReceived = false
+const url = 'https://udemypwa-academind-default-rtdb.firebaseio.com/posts.json'
+
+fetch(url)
    .then(function (res) {
       return res.json();
    })
    .then(function (data) {
       networkDataReceived = true
-      clearCard()
-      createCard();
+      updateUI(Object.values(data))
    });
 
 if ('caches' in window) {
-   caches.match('https://httpbin.org/get')
+   caches.match(url)
       .then(function (res) {
          if (res) {
             return res.json()
          }
       })
       .then(data => {
-         console.log(data)
          if (!networkDataReceived) {
-            clearCard()
-            createCard()
+            updateUI(Object.values(data))
          }
       })
 }
