@@ -1,4 +1,6 @@
-const CACHE_STATIC_NAME = 'static-v3'
+importScripts('/src/js/idb.js')
+
+const CACHE_STATIC_NAME = 'static-v4'
 const CACHE_DYNAMIC_NAME = 'dynamic-v3'
 const STATIC_ASSETS = [
    '/',
@@ -6,12 +8,18 @@ const STATIC_ASSETS = [
    '/offline.html',
    '/src/js/app.js',
    '/src/js/feed.js',
+   '/src/js/idb.js',
    '/src/js/material.min.js',
    '/src/css/app.css',
    '/src/css/feed.css',
    '/src/images/main-image.jpg',
 ]
 const url = 'https://udemypwa-academind-default-rtdb.firebaseio.com/posts.json'
+const dbPromise = idb.open('posts-store', 1, function(db){
+   if(!db.objectStoreNames.contains('posts')){
+      db.createObjectStore('posts', {keyPath: 'id'}) // search for given id
+   }
+})
 
 // function trimCache(cacheName, maxItems) {
 //    caches.open(cacheName)
@@ -92,16 +100,19 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener('fetch', function (event) {
    if (event.request.url === url) {
-      event.respondWith(
-         caches.open(CACHE_DYNAMIC_NAME)
-            .then(function (cache) {
-               return fetch(event.request)
-                  .then(res => {
-                     // trimCache(CACHE_DYNAMIC_NAME, 3)
-                     cache.put(event.request, res.clone())
-                     return res
-                  })
+      event.respondWith(fetch(event.request)
+         .then(async res => {
+            const clonedRes = res.clone()
+            const data = await clonedRes.json()
+            Object.values(data).forEach(async d =>{
+               dbPromise.then(db=>{
+                  const tx = db.transaction('posts', 'readwrite')
+                  const store = tx.objectStore('posts')
+                  store.put(d)
+               }) 
             })
+            return res
+         })
       )
    } else if (STATIC_ASSETS.find(x => x === event.request.url)) {
       event.respondWith(
